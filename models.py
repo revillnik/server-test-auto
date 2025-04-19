@@ -11,6 +11,9 @@ class Employee(db.Model):
     orders = db.relationship("Order", backref="employee")
     holiday = db.relationship("Holiday", backref="employee", uselist=False)
 
+    def __repr__(self):
+        return f"employee_id: {self.employee_id} name: {self.name} "
+
 
 class Holiday(db.Model):
     __tablename__ = "holidays"
@@ -20,6 +23,9 @@ class Holiday(db.Model):
 
     employee_id = db.Column(db.Integer(), db.ForeignKey("employees.employee_id"))
 
+    def __repr__(self):
+        return f"date_on: {self.date_on} date_out: {self.date_out} "
+
 
 class Order(db.Model):
     __tablename__ = "orders"
@@ -27,12 +33,16 @@ class Order(db.Model):
     order_date = db.Column(db.Date(), nullable=True)
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(64), nullable=False, unique=True)
     phone = db.Column(db.String(64), nullable=False, unique=True)
     adress = db.Column(db.String(255), nullable=False)
 
     employee_id = db.Column(db.Integer(), db.ForeignKey("employees.employee_id"))
 
     autos = db.relationship("Auto", backref="order")
+
+    def __repr__(self):
+        return f"order_id: {self.order_id} first_name and last_name: {self.first_name} {self.last_name} "
 
 
 class Auto(db.Model):
@@ -43,3 +53,6 @@ class Auto(db.Model):
     price = db.Column(db.Numeric(), nullable=False)
 
     order_id = db.Column(db.Integer(), db.ForeignKey("orders.order_id"))
+
+    def __repr__(self):
+        return f"auto_id: {self.auto_id} mark and model: {self.mark} {self.model} "
