@@ -112,6 +112,62 @@ def all_orders():
     return data_all_orders
 
 
+@app.route("/orders_buy_and_no_car")
+def orders_buy_and_no_car():
+    query_with_orders_buy_car = (
+        db.session.query(Order, func.count(Auto.auto_id))
+        .outerjoin(Auto)
+        .group_by(Order.order_id)
+        .all()
+    )
+    data_withs_orders_buy_and_no_car = {
+        "with_car": [
+            {
+                "order": schema_for_one_order.dump(query_with_orders_buy_car[i][0]),
+                "count_autos": query_with_orders_buy_car[i][1],
+            }
+            for i in range(len(query_with_orders_buy_car))
+            if query_with_orders_buy_car[i][1]
+        ],
+        "without_car": [
+            {
+                "order": schema_for_one_order.dump(query_with_orders_buy_car[i][0]),
+                "count_autos": query_with_orders_buy_car[i][1],
+            }
+            for i in range(len(query_with_orders_buy_car))
+            if not query_with_orders_buy_car[i][1]
+        ],
+    }
+
+    return data_withs_orders_buy_and_no_car
+
+
+@app.route("/order_max_money")
+@app.route("/order_min_money")
+@app.route("/orders_money")
+def orders_min_max_all_money():
+    query_with_orders_money = (
+        db.session.query(Order, func.sum(Auto.price))
+        .join(Auto)
+        .group_by(Order.order_id)
+        .order_by(func.sum(Auto.price))
+        .all()
+    )
+    data_with_orders_money = [
+        {
+            "order": schema_for_one_order.dump(query_with_orders_money[i][0]),
+            "sum_price": query_with_orders_money[i][1],
+        }
+        for i in range(len(query_with_orders_money))
+    ]
+    if str(request.url_rule) == "/order_min_money":
+        return data_with_orders_money[0]
+    elif str(request.url_rule) == "/order_max_money":
+        return data_with_orders_money[-1]
+    else:
+        return data_with_orders_money
+
+
 @app.route("/order/<int:order_id>")
 def order(order_id):
     query_with_one_order = db.session.query(Order).get_or_404(order_id)
