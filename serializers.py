@@ -1,5 +1,5 @@
 from app import ma, db
-from models import Employee, Holiday, Order, Auto
+from models import Employee, Holiday, Order, Auto, User
 
 
 class EmployeeSchema(ma.SQLAlchemyAutoSchema):
@@ -52,3 +52,23 @@ class AutoSchema(ma.SQLAlchemyAutoSchema):
 
 schema_for_all_autos = AutoSchema(many=True)
 schema_for_one_auto = AutoSchema(many=False)
+
+
+class UserSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = User
+        load_instance = True
+        sqla_session = db.session
+
+    user_id = ma.auto_field(dump_only=True)
+    username = ma.auto_field()
+    email = ma.auto_field()
+    password_hash = ma.auto_field(load_only=True)
+    created_on = ma.auto_field(dump_only=True)
+    updated_on = ma.auto_field(dump_only=True)
+    may_create = ma.auto_field(dump_only=True)
+    may_update = ma.auto_field(dump_only=True)
+    may_delete = ma.auto_field(dump_only=True)
+
+
+schema_for_one_user = UserSchema(many=False)
