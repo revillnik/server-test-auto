@@ -1,6 +1,6 @@
-from app import app, db, login_manager
-from models import Employee, Holiday, Order, Auto, User
-from serializers import (
+from server_auto import app, db, login_manager
+from server_auto.models import Employee, Holiday, Order, Auto, User
+from server_auto.serializers import (
     schema_for_all_employees,
     schema_for_one_employee,
     schema_for_all_holidays,
