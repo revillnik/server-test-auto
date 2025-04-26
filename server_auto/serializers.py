@@ -1,5 +1,5 @@
-from app import ma, db
-from models import Employee, Holiday, Order, Auto, User
+from server_auto import ma, db
+from server_auto.models import Employee, Holiday, Order, Auto, User
 
 
 class EmployeeSchema(ma.SQLAlchemyAutoSchema):

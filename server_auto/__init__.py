@@ -17,6 +17,4 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ma = Marshmallow(app)
 
-from views import *
-from models import *
-from serializers import *
+from server_auto.views import *
