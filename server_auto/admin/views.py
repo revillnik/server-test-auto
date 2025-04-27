@@ -2,14 +2,8 @@ from flask import Blueprint, request
 from server_auto.models import User
 from server_auto.serializers import schema_for_one_user
 from server_auto import db, login_manager
-from flask_login import (
-    login_required,
-    login_user,
-    logout_user,
-    current_user,
-    LoginManager,
-)
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_required, login_user, logout_user, current_user
+from werkzeug.security import generate_password_hash
 
 admin = Blueprint("admin", __name__)
 
